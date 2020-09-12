@@ -627,8 +627,6 @@
 
 	if(!Process_Spacemove(direction))
 		return FALSE
-	if(!has_charge(step_energy_drain))
-		return FALSE
 	if(zoom_mode)
 		to_chat(occupants, "[icon2html(src, occupants)]<span class='warning'>Unable to move while in zoom mode!</span>")
 		return FALSE
@@ -637,6 +635,11 @@
 		return FALSE
 	if(!scanmod || !capacitor)
 		to_chat(occupants, "[icon2html(src, occupants)]<span class='warning'>Missing [scanmod? "capacitor" : "scanning module"].</span>")
+		return FALSE
+	if(!use_power(step_energy_drain))
+		if(TIMER_COOLDOWN_CHECK(src, COOLDOWN_MECHA_MESSAGE))
+			to_chat(occupants, "[icon2html(src, occupants)]<span class='warning'>Insufficient power to move!</span>")
+			TIMER_COOLDOWN_START(src, COOLDOWN_MECHA_MESSAGE, 2 SECONDS)
 		return FALSE
 	if(lavaland_only && is_mining_level(z))
 		to_chat(occupants, "[icon2html(src, occupants)]<span class='warning'>Invalid Environment.</span>")
@@ -662,14 +665,12 @@
 	//if we're not facing the way we're going rotate us
 	if(dir != direction && !strafe || forcerotate || keyheld)
 		setDir(direction)
-		use_power(step_energy_drain)
 		if(turnsound)
 			playsound(src,turnsound,40,TRUE)
 		return TRUE
 
 	set_glide_size(DELAY_TO_GLIDE_SIZE(movedelay))
 	//Otherwise just walk normally
-	use_power(step_energy_drain)
 	. = step(src,direction, dir)
 
 	if(strafe)
