@@ -54807,6 +54807,7 @@
 	dir = 8;
 	pixel_x = 11
 	},
+/obj/machinery/air_sensor,
 /turf/open/floor/plasteel/white,
 /area/crew_quarters/heads/captain/private)
 "bZq" = (
@@ -81254,6 +81255,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer2{
 	dir = 9
 	},
+/obj/machinery/air_sensor,
 /turf/open/floor/plasteel,
 /area/medical/medbay/central)
 "cZP" = (
@@ -82176,7 +82178,6 @@
 	dir = 6
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer2,
-/obj/machinery/air_sensor,
 /turf/open/floor/plasteel,
 /area/medical/medbay/central)
 "dby" = (
