@@ -4,11 +4,11 @@
 	density = FALSE
 	desc = "A generic pAI hard-light holographics emitter."
 	health = 500
-	held_lh = 'icons/mob/pai_item_lh.dmi'
-	held_rh = 'icons/mob/pai_item_rh.dmi'
-	head_icon = 'icons/mob/pai_item_head.dmi'
+	held_lh = 'icons/mob/inhands/pai_item_lh.dmi'
+	held_rh = 'icons/mob/inhands/pai_item_rh.dmi'
+	head_icon = 'icons/mob/clothing/head/pai_head.dmi'
 	hud_type = /datum/hud/pai
-	icon = 'icons/mob/pai.dmi'
+	icon = 'icons/mob/silicon/pai.dmi'
 	icon_state = "repairbot"
 	job = JOB_PERSONAL_AI
 	layer = LOW_MOB_LAYER
@@ -108,6 +108,7 @@
 		"bat" = FALSE,
 		"butterfly" = FALSE,
 		"cat" = TRUE,
+		"chicken" = FALSE,
 		"corgi" = FALSE,
 		"crow" = TRUE,
 		"duffel" = TRUE,
@@ -158,12 +159,7 @@
 	QDEL_NULL(internal_gps)
 	QDEL_NULL(newscaster)
 	QDEL_NULL(signaler)
-	if(!QDELETED(card) && loc != card)
-		card.forceMove(drop_location())
-		// these are otherwise handled by paicard/handle_atom_del()
-		card.pai = null
-		card.emotion_icon = initial(card.emotion_icon)
-		card.update_appearance()
+	card = null
 	GLOB.pai_list.Remove(src)
 	return ..()
 
@@ -225,7 +221,7 @@
 		ADD_TRAIT(src, TRAIT_HANDS_BLOCKED, PAI_FOLDED)
 	desc = "A pAI hard-light holographics emitter. This one appears in the form of a [chassis]."
 
-	RegisterSignal(src, COMSIG_LIVING_CULT_SACRIFICED, .proc/on_cult_sacrificed)
+	RegisterSignal(src, COMSIG_LIVING_CULT_SACRIFICED, PROC_REF(on_cult_sacrificed))
 
 /mob/living/silicon/pai/make_laws()
 	laws = new /datum/ai_laws/pai()
@@ -250,6 +246,7 @@
 		return
 	set_health(maxHealth - getBruteLoss() - getFireLoss())
 	update_stat()
+	SEND_SIGNAL(src, COMSIG_LIVING_HEALTH_UPDATE)
 
 /**
  * Resolves the weakref of the pai's master.
